@@ -1,14 +1,17 @@
 import handler from "./util/handler";
 import dynamoDb from "./util/dynamodb";
-import { APIGatewayProxyEventV2 } from "aws-lambda";
-export const main = handler(async (event: APIGatewayProxyEventV2) => {
+
+export const main = handler(async (event) => {
   if (!event.pathParameters) {
     throw new Error("Missing path parameters.");
+  }
+  if (!event.requestContext.authorizer) {
+    throw new Error("Missing authorizer")
   }
   const params: AWS.DynamoDB.DocumentClient.GetItemInput = {
     TableName: process.env.TABLE_NAME,
     Key: {
-      userId: "123",
+      userId: event.requestContext.authorizer.iam.cognitoIdentity.identityId,
       noteId: event.pathParameters.id,
     },
   };

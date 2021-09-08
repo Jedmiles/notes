@@ -1,19 +1,22 @@
 import handler from "./util/handler";
 import dynamoDb from "./util/dynamodb";
-import { APIGatewayProxyEventV2 } from "aws-lambda";
 
-export const main = handler(async (event: APIGatewayProxyEventV2) => {
+export const main = handler(async (event) => {
   if (!event.body) {
     throw new Error("Missing event body.");
   }
   if (!event.pathParameters) {
     throw new Error("Missing path parameters.");
   }
+  if (!event.requestContext.authorizer) {
+    throw new Error("Missing authorizer")
+  }
+
   const data: NoteData = JSON.parse(event.body);
   const params = {
     TableName: process.env.TABLE_NAME,
     Key: {
-      userId: "123",
+      userId: event.requestContext.authorizer.iam.cognitoIdentity.identityId,
       noteId: event.pathParameters.id,
     },
     UpdateExpression: "SET content = :content, attachment = :attachment",

@@ -1,11 +1,14 @@
 import handler from "./util/handler";
 import dynamoDb from "./util/dynamodb";
-export const main = handler(async () => {
+export const main = handler(async (event) => {
+  if (!event.requestContext.authorizer) {
+    throw new Error("Missing authorizer")
+  }
   const params: AWS.DynamoDB.DocumentClient.QueryInput = {
     TableName: process.env.TABLE_NAME,
     KeyConditionExpression: "userId = :userId",
     ExpressionAttributeValues: {
-      ":userId": "123",
+      ":userId": event.requestContext.authorizer.iam.cognitoIdentity.identityId,
     },
   };
   const result = await dynamoDb.query(params);

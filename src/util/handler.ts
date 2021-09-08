@@ -1,6 +1,6 @@
-import { APIGatewayProxyHandlerV2 } from "aws-lambda";
+import { APIGatewayProxyHandler } from "aws-lambda";
 
-export default function handler(lambda: LambdaFn): APIGatewayProxyHandlerV2 {
+export default function handler(lambda: LambdaFn): APIGatewayProxyHandler {
   return async (event, context) => {
     let body;
     let statusCode: number;
