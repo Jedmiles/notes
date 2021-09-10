@@ -1,0 +1,14 @@
+module.exports = {
+  reactStrictMode: true,
+  env: {
+    REACT_APP_REGION: process.env.REACT_APP_REGION,
+    REACT_APP_BUCKET: process.env.REACT_APP_BUCKET,
+    REACT_APP_REGION: process.env.REACT_APP_REGION,
+    REACT_APP_API_URL: process.env.REACT_APP_API_URL,
+    REACT_APP_REGION: process.env.REACT_APP_REGION,
+    REACT_APP_USER_POOL_ID: process.env.REACT_APP_USER_POOL_ID,
+    REACT_APP_USER_POOL_CLIENT_ID: process.env.REACT_APP_USER_POOL_CLIENT_ID,
+    REACT_APP_IDENTITY_POOL_ID: process.env.REACT_APP_IDENTITY_POOL_ID,
+    SKIP_PREFLIGHT_CHECK: true,
+  },
+}
