@@ -6,6 +6,7 @@ import { onError } from "../../lib/errorLib";
 import config from "../../config";
 import Navbar from "../../components/Navbar/";
 import LoaderButton from "../../components/LoaderButton";
+import ProtectedRoute from "../../components/ProtectedRoute";
 
 export default function Note() {
   const file = useRef(null);
@@ -30,7 +31,6 @@ export default function Note() {
         setContent(content);
         setNote(note);
       } catch (e) {
-        onError(e);
       }
     }
     onLoad();
@@ -120,38 +120,40 @@ export default function Note() {
   }
 
   return (
-    <div>
-      <Navbar />
-      {note && (
-        <form onSubmit={handleSubmit}>
-          <textarea
-            name=""
-            id=""
-            cols="30"
-            rows="10"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          ></textarea>
-          {note.attachment && (
-            <p>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={note.attachmentURL}
-              >
-                {formatFilename(note.attachment)}
-              </a>
-            </p>
-          )}
-          <input type="file" name="" id="" onChange={handleFileChange} />
-          <LoaderButton  isLoading={isLoading} disabled={!validateForm()}>
-            Save
-          </LoaderButton>
-          <LoaderButton  isLoading={isDeleting} onClick={handleDelete}>
-            Delete
-          </LoaderButton>
-        </form>
-      )}
-    </div>
+    <ProtectedRoute>
+      <div>
+        <Navbar />
+        {note && (
+          <form onSubmit={handleSubmit}>
+            <textarea
+              name=""
+              id=""
+              cols="30"
+              rows="10"
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+            ></textarea>
+            {note.attachment && (
+              <p>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={note.attachmentURL}
+                >
+                  {formatFilename(note.attachment)}
+                </a>
+              </p>
+            )}
+            <input type="file" name="" id="" onChange={handleFileChange} />
+            <LoaderButton isLoading={isLoading} disabled={!validateForm()}>
+              Save
+            </LoaderButton>
+            <LoaderButton isLoading={isDeleting} onClick={handleDelete}>
+              Delete
+            </LoaderButton>
+          </form>
+        )}
+      </div>
+    </ProtectedRoute>
   );
 }

@@ -6,8 +6,9 @@ import { s3Upload } from "../lib/awsLib";
 import { onError } from "../lib/errorLib";
 import Navbar from "../components/Navbar/Navbar";
 import LoaderButton from "../components/LoaderButton";
+import ProtectedRoute from "../components/ProtectedRoute";
 
-export default function Create() {
+export default function New() {
   const file = useRef(null);
   const router = useRouter();
   const [content, setContent] = useState("");
@@ -49,23 +50,29 @@ export default function Create() {
   }
 
   return (
-    <div>
-      <Navbar />
-      <form onSubmit={handleSubmit}>
-        <textarea
-          autoFocus
-          cols="30"
-          rows="10"
-          value={content}
-          onChange={(e) => {
-            setContent(e.target.value);
-          }}
-        ></textarea>
-        <input type="file" name="" id="" onChange={handleFileChange} />
-        <LoaderButton disabled={!validateForm()} type="submit" isLoading={isLoading}>
-          Submit
-        </LoaderButton>
-      </form>
-    </div>
+    <ProtectedRoute>
+      <div>
+        <Navbar />
+        <form onSubmit={handleSubmit}>
+          <textarea
+            autoFocus
+            cols="30"
+            rows="10"
+            value={content}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
+          ></textarea>
+          <input type="file" name="" id="" onChange={handleFileChange} />
+          <LoaderButton
+            disabled={!validateForm()}
+            type="submit"
+            isLoading={isLoading}
+          >
+            Submit
+          </LoaderButton>
+        </form>
+      </div>
+    </ProtectedRoute>
   );
 }

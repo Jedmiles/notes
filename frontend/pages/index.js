@@ -14,14 +14,13 @@ function Home() {
   useEffect(() => {
     async function onLoad() {
       if (!isAuthenticated) {
-        router.push("/login");
+        // router.push("/login");
         return;
       }
       try {
         const notes = await loadNotes();
         setNotes(notes);
       } catch (e) {
-        onError(e);
       }
       setIsLoading(false);
     }
@@ -70,8 +69,8 @@ function Home() {
 
   return (
     <div>
-      <Navbar />
-      {isAuthenticated ? renderNotes() : renderLander()}
+        <Navbar />
+        {isAuthenticated ? renderNotes() : renderLander()}
     </div>
   );
 }
@@ -88,4 +87,4 @@ function Home() {
 //   return { props: {} };
 // }
 
-export default Home
+export default Home;

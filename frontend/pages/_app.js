@@ -42,7 +42,6 @@ function MyApp({ Component, pageProps }) {
       await Auth.currentAuthenticatedUser();
       userHasAuthenticated(true);
     } catch (e) {
-      console.log(e);
     }
     setIsAuthenticating(false);
   }
