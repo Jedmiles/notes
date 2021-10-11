@@ -2,6 +2,7 @@ import * as sst from "@serverless-stack/resources";
 import ApiStack from "./ApiStack";
 import StorageStack from "./StorageStack";
 import AuthStack from "./AuthStack";
+import FrontendStack from "./FrontendStack";
 
 export default function main(app: sst.App): void {
   app.setDefaultFunctionProps({
@@ -9,11 +10,16 @@ export default function main(app: sst.App): void {
   });
 
   const storageStack = new StorageStack(app, "storage");
-  const auth = new AuthStack(app, "auth");
-
-  new ApiStack(app, "api", {
+  const authStack = new AuthStack(app, "auth");
+  const apiStack = new ApiStack(app, "api", {
     table: storageStack.table,
     bucket: storageStack.bucket,
-    auth: auth.auth,
+    auth: authStack.auth,
   });
+
+  new FrontendStack(app, "frontend", {
+    api: apiStack.api,
+    auth: authStack.auth,
+    bucket: storageStack.bucket,
+  })
 }

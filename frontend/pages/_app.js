@@ -1,8 +1,9 @@
 import "../styles/globals.css";
-import { AuthWrapper } from "../contexts/AuthContext";
-import { Amplify } from "aws-amplify";
+import { AuthContext } from "../contexts/AuthContext";
+import { Amplify, Auth } from "aws-amplify";
 import config from "../config";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   Amplify.configure({
@@ -27,11 +28,35 @@ function MyApp({ Component, pageProps }) {
         },
       ],
     },
+    ssr: true,
   });
+
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+
+  useEffect(() => {
+    onLoad();
+  }, []);
+  async function onLoad() {
+    try {
+      await Auth.currentAuthenticatedUser();
+      userHasAuthenticated(true);
+    } catch (e) {
+      console.log(e);
+    }
+    setIsAuthenticating(false);
+  }
+
   return (
-    <AuthWrapper>
-      <Component {...pageProps} />;
-    </AuthWrapper>
+    <>
+      <Head>
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <title>Scratch</title>
+      </Head>
+      <AuthContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
+        {!isAuthenticating && <Component {...pageProps} />}
+      </AuthContext.Provider>
+    </>
   );
 }
 

@@ -1,16 +1,6 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext } from "react";
 
-const AuthContext = createContext(null);
-
-export function AuthWrapper({ children }) {
-  const [isAuthenticated, userHasAuthenticated] = useState(false);
-
-  return (
-    <AuthContext.Provider value={{isAuthenticated, userHasAuthenticated}}>
-      {children}
-    </AuthContext.Provider>
-  );
-}
+export const AuthContext = createContext(null);
 
 export function useAuthContext() {
   return useContext(AuthContext);
